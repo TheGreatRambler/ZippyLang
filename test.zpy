@@ -1,0 +1,7 @@
+] +A
+Zippy.BLANK(3);
+] +B
+Zippy.BLANK(3);
+] -A
+] -B
+Zippy.IMPORT("another.zpy");

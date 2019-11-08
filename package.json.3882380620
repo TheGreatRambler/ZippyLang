@@ -1,0 +1,15 @@
+{
+  "name": "ZippyLang",
+  "version": "1.0.0",
+  "description": "Compile TAS scripts to any platform",
+  "main": "index.js",
+  "keywords": [],
+  "author": "TheGreatRambler",
+  "license": "MIT",
+  "dependencies": {
+    "bitwise": "^2.0.4",
+    "getopts": "^2.2.5",
+    "lodash.invert": "^4.3.0",
+    "require-dir": "^1.2.0"
+  }
+}
