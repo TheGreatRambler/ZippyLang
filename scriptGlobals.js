@@ -56,13 +56,15 @@ module.exports = {
 			color: "#000000FF",
 			fontSize: 0
 		},
-		ALL_SUBTITLES: []
+		ALL_SUBTITLES: [],
+		// The emu version, optional mostly
+		EMU_VERSION: ""
 	},
 	// Preferred export target
 	PREFERRED_EXPORT: "",
 	// Wether this target is required for the TAS
 	// Default is no for extra portability
-	PREFERRED_EXPORT_REQUIRED: false
+	PREFERRED_EXPORT_REQUIRED: false,
 };
 
 /*

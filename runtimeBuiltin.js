@@ -15,30 +15,28 @@ var allBuiltins = [];
 // This allows runtimes to extend the global vars
 var allGlobalVars = require("./scriptGlobals");
 
-function addBuiltin(func, zippyContext) {
+function addBuiltin(func, context) {
 	// Generic way to add ANY function as a builtin
 	// Add builtins themselves
-	zippyContext[func.name + "_"] = func;
+	context[func.name + "_"] = func;
 	// This is an ugly hack to get the global context to mirror that of the vm
-	// IMPORT is special in that it gets the full context
-	var context = func.name === "IMPORT" ? "___THIS_GLOBAL___" : "this";
 	var codeToAdd = `
-		Zippy.${func.name} = function() {
+		${func.name} = function() {
 			// Need to include the context of the function
-			Zippy.${func.name}_(${context}, ...arguments);
+			${func.name}_(this, ...arguments);
 		};
 	`;
 	return codeToAdd;
 }
 
-function addAdditionalRuntime(name, zippyContext) {
+function addAdditionalRuntime(name, context) {
 	var runtime = extraRuntimeGlobals[name];
 	if (runtime) {
 		// These globals exist, add them to the builtins
 		var combinedFuncs = "";
 		runtime.funcs.forEach(function(func) {
 			// Add these functions to the sandbox the same way it was done for the others
-			combinedFuncs += addBuiltin(func, zippyContext);
+			combinedFuncs += addBuiltin(func, context);
 		});
 		// Add globals from runtime
 		// Not returned to the VM but set to an object that the VM has a reference to
@@ -80,12 +78,13 @@ function IMPORT(c, scriptName) {
 	// TODO this doesnt work
 	// IMPORT is special in that it's context is completely global, not just the API
 	// Compile this script
-	var script = new vm.Script(compileScript(scriptName), {
+	var scriptString = compileScript(scriptName);
+	var script = new vm.Script(scriptString, {
 		filename: scriptName
 	});
 
+	// Creates context wether it needs it or not
 	vm.createContext(c);
-	//console.log(c);
 
 	// Run in the context of the script (hopefully contextifying it doesn't ruin anything down the road)
 	script.runInContext(c);
@@ -328,6 +327,12 @@ function END_SUBTITLE(c) {
 }
 allBuiltins.push(END_SUBTITLE);
 
+function SET_EMU_VERSION(c, emuVersion) {
+	// Set the emu version to a string
+	c.METADATA.EMU_VERSION = emuVersion;
+}
+allBuiltins.push(SET_EMU_VERSION);
+
 function READ_BIN_FILE(c, filepath) {
 	// Get binary file (mostly for getting things like savestates)
 	// Returns a buffer
@@ -337,7 +342,7 @@ allBuiltins.push(READ_BIN_FILE);
 
 // Dependencies of the builtins
 // Might not need to be populated at all
-module.exports.dependencies = [];
+module.exports.dependencies = ["vm"];
 // All allBuiltins
 module.exports.builtins = allBuiltins;
 module.exports.globalVars = allGlobalVars;

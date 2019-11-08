@@ -21,7 +21,7 @@ function replaceInput(line) {
 		// Remove whitespace
 		var text = line.match(/\][\S\s]*/g)[0].substr(1).trim();
 		// Because it uses backticks, this supports the ${} syntax for including variables
-		return "Zippy._PARSE_INPUT_LINE(`" + text + "`);";
+		return "_PARSE_INPUT_LINE(`" + text + "`);";
 	} else {
 		return line;
 	}

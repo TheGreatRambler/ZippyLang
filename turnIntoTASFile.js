@@ -11,13 +11,17 @@ var exportTargets = requireDir("./export", {
 function optionalVariables(exporter, fullContext) {
 	// Set comments if needed
 	if (exporter.setComments) {
-		exporter.setComments(c.METADATA.COMMENTS);
+		exporter.setComments(fullContext.METADATA.COMMENTS);
 	}
 
 	if (exporter.addSubtitle) {
 		fullContext.METADATA.ALL_SUBTITLES.forEach(function(subtitle) {
 			exporter.addSubtitle(subtitle);
 		});
+	}
+
+	if (exporter.setEmuVersion) {
+		exporter.setEmuVersion(fullContext.METADATA.EMU_VERSION);
 	}
 }
 
