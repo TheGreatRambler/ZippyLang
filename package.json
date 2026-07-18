@@ -10,7 +10,7 @@
   "author": "TheGreatRambler",
   "license": "MIT",
   "dependencies": {
-    "adm-zip": "^0.4.13",
+    "adm-zip": "^0.6.0",
     "bitwise": "^2.0.4",
     "color-string": "^1.5.3",
     "getopts": "^2.2.5",
